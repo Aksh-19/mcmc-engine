@@ -61,21 +61,17 @@ diagnostics.effective_sample_size(chain)
 
 ## Roadmap
 
-| Phase | Topic | Week |
-|-------|-------|------|
-| **0** | Repo setup & project skeleton | Day 1 |
-| **1** | Probability foundations + Metropolis-Hastings | Week 1 |
-| **2** | Gibbs sampling + Slice sampling | Week 2 |
-| **3** | Diagnostics suite (R-hat, ESS, trace plots) | Week 2–3 |
-| **4** | Automatic differentiation engine (forward + reverse) | Week 3 |
-| **5** | Hamiltonian Monte Carlo | Week 4 |
-| **6** | NUTS (No-U-Turn Sampler) | Week 5 |
-| **7** | Capstone apps (change-point detection, hierarchical A/B testing, GP regression) | Week 5–6 |
-| **8** | Polish, docs & showcase | Week 6 |
-
-## The Rule
-
-> **numpy and matplotlib only.** No PyMC, no Stan, no JAX, no PyTorch — until Phase 7 where we compare against them. The whole point is that *we* are the inference engine.
+| Phase | Topic |
+|-------|-------|
+| **0** | Repo setup & project skeleton ✅ |
+| **1** | Probability foundations + Metropolis-Hastings |
+| **2** | Gibbs sampling + Slice sampling |
+| **3** | Diagnostics suite (R-hat, ESS, trace plots) |
+| **4** | Automatic differentiation engine (forward + reverse) |
+| **5** | Hamiltonian Monte Carlo |
+| **6** | NUTS (No-U-Turn Sampler) |
+| **7** | Capstone apps (change-point detection, hierarchical A/B testing, GP regression) |
+| **8** | Polish, docs & showcase |
 
 ## Dependencies
 
