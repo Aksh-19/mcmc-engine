@@ -64,7 +64,7 @@ diagnostics.effective_sample_size(chain)
 | Phase | Topic |
 |-------|-------|
 | **0** | Repo setup & project skeleton ✅ |
-| **1** | Probability foundations + Metropolis-Hastings |
+| **1** | Probability foundations + Metropolis-Hastings ✅ |
 | **2** | Gibbs sampling + Slice sampling |
 | **3** | Diagnostics suite (R-hat, ESS, trace plots) |
 | **4** | Automatic differentiation engine (forward + reverse) |
