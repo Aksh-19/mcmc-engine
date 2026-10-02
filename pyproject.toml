@@ -28,13 +28,3 @@ include = ["mcmc*"]
 testpaths = ["tests"]
 addopts = "-v --tb=short"
 
-[tool.ruff]
-line-length = 100
-target-version = "py310"
-
-[tool.ruff.lint]
-select = ["E", "F", "W", "I", "N", "D"]
-ignore = ["D100", "D104"]
-
-[tool.ruff.lint.pydocstring-convention]
-convention = "google"
