@@ -67,7 +67,7 @@ diagnostics.effective_sample_size(chain)
 | **1** | Probability foundations + Metropolis-Hastings ✅ |
 | **2** | Gibbs sampling + Slice sampling ✅ |
 | **3** | Diagnostics suite (R-hat, ESS, trace plots) ✅ |
-| **4** | Automatic differentiation engine (forward + reverse) |
+| **4** | Automatic differentiation engine (forward + reverse) ✅ |
 | **5** | Hamiltonian Monte Carlo |
 | **6** | NUTS (No-U-Turn Sampler) |
 | **7** | Capstone apps (change-point detection, hierarchical A/B testing, GP regression) |
