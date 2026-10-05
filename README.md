@@ -15,7 +15,7 @@ A mini-Stan: give it any probabilistic model, and it finds the posterior using p
 | Metropolis-Hastings | ✅ | The foundational random-walk sampler |
 | Gibbs | ✅ | Coordinate-wise sampling with exact full conditionals |
 | Slice | ✅ | Adaptive, tuning-free univariate/multivariate sampling |
-| HMC | 🔲 | Hamiltonian Monte Carlo — physics meets statistics |
+| HMC | ✅ | Hamiltonian Monte Carlo — physics meets statistics |
 | NUTS | 🔲 | No-U-Turn Sampler — the algorithm inside Stan |
 
 ## Architecture
@@ -68,7 +68,7 @@ diagnostics.effective_sample_size(chain)
 | **2** | Gibbs sampling + Slice sampling ✅ |
 | **3** | Diagnostics suite (R-hat, ESS, trace plots) ✅ |
 | **4** | Automatic differentiation engine (forward + reverse) ✅ |
-| **5** | Hamiltonian Monte Carlo |
+| **5** | Hamiltonian Monte Carlo ✅ |
 | **6** | NUTS (No-U-Turn Sampler) |
 | **7** | Capstone apps (change-point detection, hierarchical A/B testing, GP regression) |
 | **8** | Polish, docs & showcase |

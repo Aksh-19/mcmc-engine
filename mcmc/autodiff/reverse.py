@@ -52,6 +52,9 @@ class Node:
     def __sub__(self, other):
         return self + (-other)
         
+    def __rsub__(self, other):
+        return other + (-self)
+        
     # --- ADVANCED MATH ---
     def __pow__(self, other):
         assert isinstance(other, (int, float)), "only supporting int/float powers for now"
