@@ -70,7 +70,7 @@ diagnostics.effective_sample_size(chain)
 | **4** | Automatic differentiation engine (forward + reverse) ✅ |
 | **5** | Hamiltonian Monte Carlo ✅ |
 | **6** | NUTS (No-U-Turn Sampler) |
-| **7** | Capstone apps (change-point detection, hierarchical A/B testing, GP regression) |
+| **7** | Capstone apps (Bayesian Geiger Counter 3D, change-point detection, GP regression) |
 | **8** | Polish, docs & showcase |
 
 ## Dependencies
