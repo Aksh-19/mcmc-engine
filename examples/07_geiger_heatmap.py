@@ -37,18 +37,18 @@ class GeigerModel:
         return log_p
 
 # ==========================================
-# 1. GENERATE DATA
+# 1. GENERATE DATA (Dense Sensor Grid)
 # ==========================================
-print("Simulating dense drone spiral scan through warehouse...")
-true_x, true_y, true_z = 7.5, 2.0, 8.0
-true_I0 = 1200.0
-background = 10.0
+print("Simulating a noisy grid of sensors in a 6x6 room...")
+true_x, true_y, true_z = 4.0, 4.0, 1.0  # Source elevated slightly at (4,4)
+true_I0 = 150.0  # Weaker source
+background = 40.0 # High background noise
 
-t = np.linspace(0, 6 * np.pi, 200)
-drone_x = 5 + 4.5 * np.cos(t)
-drone_y = 5 + 4.5 * np.sin(t)
-drone_z = np.linspace(1, 9, 200)
-drone_coords = np.column_stack((drone_x, drone_y, drone_z))
+# 8x8 uniform grid of sensors on the floor (64 total points)
+x_grid = np.linspace(0, 6, 8)
+y_grid = np.linspace(0, 6, 8)
+xv, yv = np.meshgrid(x_grid, y_grid)
+drone_coords = np.column_stack((xv.ravel(), yv.ravel(), np.zeros_like(xv.ravel())))
 
 rng = np.random.default_rng(42)
 counts = []
@@ -63,7 +63,8 @@ counts = np.array(counts)
 print("\nRunning NUTS to find the source...")
 model = GeigerModel(drone_coords, counts, background=background)
 sampler = NUTSSampler(model, step_size=0.01, max_depth=6, seed=42)
-chain = sampler.run(num_samples=300, initial_state=[5.0, 5.0, 5.0, 4.6])[100:]
+# Start guess in center of the 6x6 room
+chain = sampler.run(num_samples=300, initial_state=[3.0, 3.0, 1.0, 4.0])[100:]
 
 # ==========================================
 # 3. SEABORN CONTINUOUS HEATMAP
@@ -71,30 +72,32 @@ chain = sampler.run(num_samples=300, initial_state=[5.0, 5.0, 5.0, 4.6])[100:]
 print("\nGenerating Seaborn Continuous Heatmap...")
 sns.set_theme(style="darkgrid")
 
-# We plot the X and Y coordinates of the posterior chain
 g = sns.JointGrid(x=chain[:, 0], y=chain[:, 1], height=9, space=0.1)
 
-# Plot a glowing continuous KDE map using the "magma" colormap
-g.plot_joint(sns.kdeplot, fill=True, cmap="magma", thresh=0.01, levels=20)
+# Plot a glowing continuous KDE map for the posterior probability
+g.plot_joint(sns.kdeplot, fill=True, cmap="magma", thresh=0.01, levels=25)
 
-# Marginals showing the exact bell curves for X and Y
+# Marginals showing the 1D probabilities
 g.plot_marginals(sns.kdeplot, color="purple", fill=True, alpha=0.7)
 
-# Overlay True Source location as a cyan star
-g.ax_joint.scatter(true_x, true_y, color='cyan', marker='*', s=400, edgecolor='black', label="True Source (X,Y)")
+# Overlay the RAW SENSOR READINGS as a background grid!
+sensor_scatter = g.ax_joint.scatter(drone_coords[:, 0], drone_coords[:, 1], c=counts, cmap='magma', 
+                   s=400, marker='s', alpha=0.3, label="Raw Sensor Readings")
 
-# Overlay the drone spiral faintly in the background
-g.ax_joint.plot(drone_x, drone_y, color='gray', alpha=0.4, linestyle='--', label="Drone Path")
-# Put tiny dots on the drone path colored by radiation intensity
-g.ax_joint.scatter(drone_x, drone_y, c=counts, cmap='magma', s=15, alpha=0.7, edgecolor='none')
+# Add a colorbar for the raw sensor readings
+cbar = plt.colorbar(sensor_scatter, ax=g.ax_joint, pad=0.1, fraction=0.05)
+cbar.set_label("Raw Sensor Readings (CPM)", fontsize=10)
 
-g.ax_joint.set_xlim(0, 10)
-g.ax_joint.set_ylim(0, 10)
-g.ax_joint.set_xlabel("Warehouse X Coordinate", fontsize=12)
-g.ax_joint.set_ylabel("Warehouse Y Coordinate", fontsize=12)
+# Overlay True Source location
+g.ax_joint.scatter(true_x, true_y, color='cyan', marker='*', s=300, edgecolor='black', label="True Source (X,Y)")
+
+g.ax_joint.set_xlim(0, 6)
+g.ax_joint.set_ylim(0, 6)
+g.ax_joint.set_xlabel("Room X Coordinate", fontsize=12)
+g.ax_joint.set_ylabel("Room Y Coordinate", fontsize=12)
 g.ax_joint.legend(loc="upper left")
 
-g.fig.suptitle("Bayesian Radiation Map (Continuous Posterior KDE)", y=1.03, fontsize=16, fontweight='bold')
+g.fig.suptitle("Bayesian Radiation Map (NUTS Posterior Density)", y=1.03, fontsize=16, fontweight='bold')
 
 plt.savefig("examples/plots/07_geiger_heatmap.png", dpi=150, bbox_inches='tight')
 print("Saved glowing map to: examples/plots/07_geiger_heatmap.png")

@@ -1,84 +1,72 @@
-# 🧠 mcmc-engine
+# Probabilistic Programming Engine (From Scratch)
 
-A fully functional MCMC sampling library built from scratch in Python — **numpy and matplotlib only**.
+A fully-featured Markov Chain Monte Carlo (MCMC) engine and Probabilistic Programming framework built entirely from scratch in pure Python. 
 
-No PyMC. No Stan. No JAX. No PyTorch. **You are the inference engine.**
+This project was built to understand the deep mathematical mechanics behind modern probabilistic programming languages like PyMC and Stan. It features a custom **Reverse-Mode Automatic Differentiation** engine, advanced physics-based samplers like the **No-U-Turn Sampler (NUTS)**, and real-world Bayesian inference capstone applications.
 
-## What is this?
+---
 
-A mini-Stan: give it any probabilistic model, and it finds the posterior using physics-inspired sampling. Built for learning, built for understanding, built to make interviewers say *"wait, you built this from scratch?"*
+## 🏆 Capstone Applications
 
-## Samplers
+To prove the power of the engine, it was used to solve complex, real-world Bayesian inference problems.
 
-| Sampler | Status | Description |
-|---------|--------|-------------|
-| Metropolis-Hastings | ✅ | The foundational random-walk sampler |
-| Gibbs | ✅ | Coordinate-wise sampling with exact full conditionals |
-| Slice | ✅ | Adaptive, tuning-free univariate/multivariate sampling |
-| HMC | ✅ | Hamiltonian Monte Carlo — physics meets statistics |
-| NUTS | ✅ | No-U-Turn Sampler — the algorithm inside Stan |
+### Capstone 1: Bayesian Geiger Counter (3D Radiation Mapping)
+Imagine a room equipped with a grid of cheap, highly noisy radiation sensors. A radioactive source is hidden somewhere in the room. By feeding the noisy Poisson clicks into the NUTS sampler, the engine calculates a 3D probability heatmap of the exact coordinates of the hidden source.
 
-## Architecture
+![Geiger Heatmap](examples/plots/07_geiger_heatmap.png)
+*The physical grid of sensors is shown in the background. The continuous, glowing "magma" KDE map shows the engine's perfect continuous posterior prediction of the true source (cyan star).*
 
-```
-mcmc-engine/
-├── mcmc/
-│   ├── distributions/    # Target distributions (priors, likelihoods)
-│   ├── samplers/          # MH, Gibbs, Slice, HMC, NUTS
-│   ├── diagnostics/       # R-hat, ESS, trace plots, autocorrelation
-│   └── autodiff/          # Forward-mode (dual numbers) + reverse-mode (tape)
-├── tests/                 # pytest test suite
-├── examples/              # Jupyter notebooks demonstrating usage
-└── docs/theory/           # Derivations, intuition, "aha moments"
-```
+### Capstone 2: Stealth Cyber-Attack (Change-Point Detection)
+A hacker plants a "sleeper" malware on a massive corporate server. It wakes up on an unknown day and begins siphoning a tiny trickle of data. The theft is completely hidden inside the massive, chaotic daily variance of normal server logs. 
 
-## Quick Start
+Using **Continuous Sigmoid Relaxation** to make the discrete calendar days differentiable, the physics engine rolls down the timeline to find the exact day the breach began.
 
+![Change-Point Detection](examples/plots/07_change_point.png)
+*The purple curves represent the Bayesian posterior tracing exactly when the stealth attack activated.*
+
+---
+
+## ⚙️ Engine Features
+
+*   **Custom Autodiff Engine:** A reverse-mode automatic differentiation computation graph (`Node` class) supporting standard calculus, logs, and exponentials.
+*   **Physics-Based Samplers:**
+    *   **Hamiltonian Monte Carlo (HMC):** Uses leapfrog integration to simulate physical momentum through the probability space.
+    *   **No-U-Turn Sampler (NUTS):** Implements dynamic recursive tree-building to automatically tune trajectory lengths and avoid U-turns.
+*   **Classic Samplers:** Metropolis-Hastings, Gibbs, and Slice sampling.
+*   **Diagnostics:** Gelman-Rubin ($\hat{R}$), Effective Sample Size (ESS), and Autocovariance.
+
+### NUTS vs HMC vs Metropolis-Hastings
+Below is a Seaborn JointGrid comparison of the samplers attempting to solve the highly curved 2D "Banana" distribution. 
+*   **Red (MH):** Fails to explore the tails.
+*   **Blue (HMC):** Explores somewhat but gets stuck in localized loops if poorly tuned.
+*   **Green (NUTS):** Perfectly maps the entire curve without manual tuning!
+
+![Sampler Comparison](examples/plots/08_sampler_comparison.png)
+
+---
+
+## 🚀 Quickstart
+
+**1. Clone the repository and set up the environment**
 ```bash
-# Install in development mode
-pip install -e .
-
-# Run tests
-pytest tests/ -v
+git clone https://github.com/Aksh-19/mcmc-engine.git
+cd mcmc-engine
+python -m venv venv
+source venv/bin/activate
 ```
 
-```python
-from mcmc.samplers import MetropolisHastings
-from mcmc.distributions import Normal
-from mcmc import diagnostics
-
-# Define your target distribution
-target = Normal(mu=0, sigma=1)
-
-# Sample from it
-sampler = MetropolisHastings(target, proposal_scale=0.5)
-chain = sampler.run(num_samples=10_000, initial_state=0.0)
-
-# Check convergence
-diagnostics.trace_plot(chain)
-diagnostics.effective_sample_size(chain)
+**2. Install dependencies**
+```bash
+pip install -r requirements.txt
 ```
 
-## Roadmap
+**3. Run the Capstones!**
+```bash
+python examples/07_geiger_heatmap.py
+python examples/07_change_point.py
+```
 
-| Phase | Topic |
-|-------|-------|
-| **0** | Repo setup & project skeleton ✅ |
-| **1** | Probability foundations + Metropolis-Hastings ✅ |
-| **2** | Gibbs sampling + Slice sampling ✅ |
-| **3** | Diagnostics suite (R-hat, ESS, trace plots) ✅ |
-| **4** | Automatic differentiation engine (forward + reverse) ✅ |
-| **5** | Hamiltonian Monte Carlo ✅ |
-| **6** | NUTS (No-U-Turn Sampler) ✅ |
-| **7** | Capstone apps (Bayesian Geiger Counter 3D, change-point detection, GP regression) |
-| **8** | Polish, docs & showcase |
+---
 
-## Dependencies
-
-- `numpy` — numerical computation
-- `matplotlib` — visualization only
-- `pytest` — testing
-
-## License
-
-MIT
+## 📚 Documentation
+Detailed mathematical explanations and engineering challenges (like solving Vanishing Gradients and Posterior Collapse) are documented in the [`docs/theory/`](docs/theory/) folder.
